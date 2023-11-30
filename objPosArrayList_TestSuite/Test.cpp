@@ -132,6 +132,52 @@ void testInsertHead_5Element()
 	// The destructor will be called automatically for stack-allocated objects
 }
 
+void testInsertHead_201Element()
+{
+	objPos currentPos;
+	objPos bodyPos{2, 5, 'a'};  
+	objPos headPos{3, 3, 'm'};
+
+	// Insert 200 body elements, then 1 unique head element
+	objPosArrayList thisList;
+	for(int i =0; i<200; i++)
+	{
+		thisList.insertHead(bodyPos);
+	}
+	thisList.insertHead(headPos);
+	int expectedSize = 200;
+	int actualSize = thisList.getSize();
+		
+	// Confirm the list size is now 200
+	ASSERT_EQUAL(expectedSize, actualSize);
+
+	bool expectedCheck = true;
+	bool actualCheck;
+
+	// Then, check the head element is the unique element
+	thisList.getHeadElement(currentPos);
+	actualCheck = headPos.isPosEqual(&currentPos);
+
+	ASSERT_EQUAL(expectedCheck, actualCheck);
+
+	// Next, chech the body elements at index 1, 2, and 3.
+	for(int i = 1; i < 200; i++)
+	{
+		thisList.getElement(currentPos, i);
+		actualCheck = bodyPos.isPosEqual(&currentPos);
+
+		ASSERT_EQUAL(expectedCheck, actualCheck);	
+	}
+
+	// Finally, check the tail element is the body element
+	thisList.getTailElement(currentPos);
+	actualCheck = bodyPos.isPosEqual(&currentPos);
+
+	ASSERT_EQUAL(expectedCheck, actualCheck);
+
+	// The destructor will be called automatically for stack-allocated objects
+}
+
 
 
 // Test Case 3a - insertTail 1 Element 
@@ -209,6 +255,55 @@ void testInsertTail_5Element()
 
 	// Next, chech the body elements at index 1, 2, and 3.
 	for(int i = 1; i < actualSize - 1; i++)
+	{
+		thisList.getElement(currentPos, i);
+		actualCheck = bodyPos.isPosEqual(&currentPos);
+
+		ASSERT_EQUAL(expectedCheck, actualCheck);	
+	}
+
+	// Finally, check the tail element is the body element
+	thisList.getTailElement(currentPos);
+	actualCheck = tailPos.isPosEqual(&currentPos);
+
+	ASSERT_EQUAL(expectedCheck, actualCheck);
+
+	// The destructor will be called automatically for stack-allocated objects
+}
+
+void testInsertTail_206Element()
+{
+	objPos currentPos;
+	objPos bodyPos{2, 5, 'a'};  
+	objPos tailPos{3, 3, 'm'};
+
+	// Insert 205 body elements, then 1 unique tail element
+	objPosArrayList thisList;
+
+	for (int i=0; i< 205; i++)
+	{
+		thisList.insertTail(bodyPos);
+	}
+	
+	thisList.insertTail(tailPos);
+
+	int expectedSize = 200;
+	int actualSize = thisList.getSize();
+		
+	// Confirm the list size is now 200
+	ASSERT_EQUAL(expectedSize, actualSize);
+
+	bool expectedCheck = true;
+	bool actualCheck;
+
+	// Then, check the head element is the common body element
+	thisList.getHeadElement(currentPos);
+	actualCheck = bodyPos.isPosEqual(&currentPos);
+
+	ASSERT_EQUAL(expectedCheck, actualCheck);
+
+	// Next, chech the body elements up to index 199
+	for(int i = 1; i < 199; i++)
 	{
 		thisList.getElement(currentPos, i);
 		actualCheck = bodyPos.isPosEqual(&currentPos);
@@ -362,8 +457,14 @@ bool runAllTests(int argc, char const *argv[]) {
     s.push_back(CUTE(testConstructor));
 	s.push_back(CUTE(testInsertHead_1Element));
 	s.push_back(CUTE(testInsertHead_5Element));
+
+	s.push_back(CUTE(testInsertHead_201Element));
+
 	s.push_back(CUTE(testInsertTail_1Element));
 	s.push_back(CUTE(testInsertTail_5Element));
+
+	s.push_back(CUTE(testInsertTail_206Element));
+
 	s.push_back(CUTE(testRemoveHead_1Element));
 	s.push_back(CUTE(testRemoveHead_5Element));
 	s.push_back(CUTE(testRemoveTail_1Element));
