@@ -4,6 +4,7 @@
 #include "GameMechs.h"
 #include "objPos.h"
 #include "objPosArrayList.h"
+#include "Food.h"
 
 class Player
 {
@@ -16,19 +17,31 @@ class Player
     public:
         enum Dir {UP, DOWN, LEFT, RIGHT, STOP};  // This is the direction state
 
-        Player(GameMechs* thisGMRef);
+        Player(GameMechs* thisGMRef,Food* FoodRef);
         ~Player();
 
-        void getPlayerPos(objPos &returnPos); // Upgrade this in iteration 3.
+        objPosArrayList* getPlayerPos(); // Upgrade this in iteration 3.
         void updatePlayerDir();
         void movePlayer();
+        
+        // Need more actions in here:
+        // after insterting head but before removing tail
+        // - check if new head position collides with food and adjust snake
+
+        int checkFoodCollision(); //NOTE: function set to int and not a bool so it can check for regular AND special food FOR BONUS
+                                  
+        //lastly add self collision check
+        // if self-collided set looseFlag and exitflag both true. this should break out of loop and end game
+        bool checkSelfCollision();
 
     private:
-        objPos playerPos;   // Upgrade this in iteration 3.       
+        objPosArrayList *playerPosList;   // Upgrade this in iteration 3.       
         enum Dir myDir;
 
         // Need a reference to the Main Game Mechanisms
         GameMechs* mainGameMechsRef;
+        Food* FoodReference; 
+        
 };
 
 #endif
